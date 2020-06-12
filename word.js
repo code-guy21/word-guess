@@ -1,14 +1,25 @@
 const Letter = require("./letter");
 
 function Word(str) {
-  this.arr = [...str].map((char) => new Letter(char.toLowerCase()));
+  this.arr = [...str].map((char) => (char !== " " ? new Letter(char) : " "));
 
   this.display = function () {
-    return this.arr.map((letter) => letter.get()).join(" ");
+    return this.arr.join(" ");
   };
 
   this.attempt = function (char) {
-    this.arr.forEach((letter) => letter.guess(char));
+    let correct = false;
+    this.arr.forEach((letter) => {
+      if (letter !== " ") {
+        if (letter.guess(char)) {
+          correct = true;
+        }
+      }
+    });
+
+    console.log(`\n${this.display()}\n`);
+
+    return correct;
   };
 }
 

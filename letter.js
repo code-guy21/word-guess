@@ -2,13 +2,18 @@ function Letter(char) {
   this.value = char;
   this.guessed = false;
 
-  this.get = function () {
-    return this.guessed ? this.value : "_";
-  };
-
   this.guess = function (char) {
-    this.guessed = char === this.value;
+    if (char.toLowerCase() === this.value.toLowerCase()) {
+      this.guessed = true;
+      return true;
+    }
+
+    return false;
   };
 }
+
+Letter.prototype.toString = function () {
+  return this.guessed ? this.value : "_";
+};
 
 module.exports = Letter;
