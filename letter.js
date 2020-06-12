@@ -1,13 +1,13 @@
 function Letter(char) {
-  this.char = char;
+  this.value = char;
   this.guessed = false;
 
-  this.value = function () {
-    return this.guessed ? this.char : "_";
+  this.get = function () {
+    return this.guessed ? this.value : "_";
   };
 
-  this.guess = function (val) {
-    this.guessed = val === this.char;
+  this.guess = function (char) {
+    this.guessed = char === this.value;
   };
 }
 
