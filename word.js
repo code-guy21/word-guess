@@ -2,9 +2,14 @@ const Letter = require("./letter");
 
 function Word(str) {
   this.arr = [...str].map((char) => new Letter(char));
+  this.solved = 0;
 
   this.display = function () {
     return this.arr.join(" ");
+  };
+
+  this.win = function () {
+    return this.solved === this.arr.length;
   };
 
   this.attempt = function (char, attempts) {
@@ -17,7 +22,7 @@ function Word(str) {
         break;
       } else if (this.arr[i].guess(char)) {
         correct = true;
-        break;
+        this.solved++;
       }
     }
 

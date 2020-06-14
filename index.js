@@ -4,6 +4,7 @@ const data = require("./pokemon");
 const Word = require("./word");
 
 let pokemon = new Word(data[Math.floor(Math.random() * 149)]);
+console.log(pokemon.arr);
 
 function start(attempts) {
   if (attempts === 0) {
@@ -18,10 +19,18 @@ function start(attempts) {
       },
     ])
     .then((resp) => {
-      if (pokemon.attempt(resp.guess, attempts)) {
-        start(attempts);
-      } else {
+      let guess = pokemon.attempt(resp.guess, attempts);
+
+      if (pokemon.win()) {
+        console.log("You Win!");
+        console.log("\nGuess another Pokemon!\n");
+        pokemon = new Word(data[Math.floor(Math.random() * 149)]);
+        console.log(`${pokemon.display()}\n\n`);
+        start(10);
+      } else if (!guess) {
         start(attempts - 1);
+      } else {
+        start(attempts);
       }
     });
 }
