@@ -1,30 +1,32 @@
 const inquirer = require("inquirer");
-const pokemon = require("./pokemon");
+const data = require("./pokemon");
+
 const Word = require("./word");
 
-let randPokemon = new Word(pokemon[Math.floor(Math.random() * 150)]);
-console.log(randPokemon.arr);
+let pokemon = new Word(data[Math.floor(Math.random() * 150)]);
 
-function game(attempts) {
+function start(attempts) {
   if (attempts === 0) {
-    console.log("game over");
-    return;
+    return console.log(`Game Over!\n\nIt was ${pokemon.reveal()}\n`);
   }
 
   inquirer
     .prompt([
       {
         name: "guess",
-        message: "Guess a letter",
+        message: "Enter a letter",
       },
     ])
     .then((resp) => {
-      if (randPokemon.attempt(resp.guess)) {
-        game(attempts);
+      if (pokemon.attempt(resp.guess, attempts)) {
+        start(attempts);
       } else {
-        game(attempts - 1);
+        start(attempts - 1);
       }
     });
 }
 
-game(10);
+console.log("\nGuess that Pokemon!\n");
+console.log(`${pokemon.display()}\n\n`);
+
+start(10);
