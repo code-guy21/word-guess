@@ -3,7 +3,7 @@ const data = require("./pokemon");
 
 const Word = require("./word");
 
-let pokemon = new Word(data[Math.floor(Math.random() * 150)]);
+let pokemon = new Word(data[Math.floor(Math.random() * 149)]);
 
 function start(attempts) {
   if (attempts === 0) {

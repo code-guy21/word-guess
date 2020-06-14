@@ -1,7 +1,7 @@
 const Letter = require("./letter");
 
 function Word(str) {
-  this.arr = [...str].map((char) => (char !== " " ? new Letter(char) : " "));
+  this.arr = [...str].map((char) => new Letter(char));
 
   this.display = function () {
     return this.arr.join(" ");
@@ -9,24 +9,29 @@ function Word(str) {
 
   this.attempt = function (char, attempts) {
     let correct = false;
+    let alreadyGuessed = false;
 
-    this.arr.forEach((letter) => {
-      if (letter !== " ") {
-        if (letter.guess(char)) {
-          correct = true;
-        }
+    for (let i = 0; i < this.arr.length; i++) {
+      if (this.arr[i].guessed && this.arr[i].guess(char)) {
+        alreadyGuessed = true;
+        break;
+      } else if (this.arr[i].guess(char)) {
+        correct = true;
+        break;
       }
-    });
+    }
 
     console.log(`\n${this.display()}\n`);
 
-    if (correct) {
+    if (alreadyGuessed) {
+      console.log("Already guessed\n");
+    } else if (correct) {
       console.log("Correct!\n");
     } else {
-      console.log(`Wrong!\n\n${attempts} attempt(s) remaining\n`);
+      console.log(`Wrong!\n\n${attempts - 1} attempt(s) remaining\n`);
     }
 
-    return correct;
+    return correct || alreadyGuessed;
   };
 
   this.reveal = function () {

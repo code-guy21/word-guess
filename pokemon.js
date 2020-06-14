@@ -27,7 +27,6 @@ module.exports = [
   "raichu",
   "sandshrew",
   "sandslash",
-  "nidoran-f",
   "nidorina",
   "nidoqueen",
   "nidoran-m",
