@@ -5,7 +5,6 @@ const chalk = require("chalk");
 const Word = require("./word");
 
 let pokemon = new Word(data[Math.floor(Math.random() * 149)]);
-console.log(pokemon.reveal());
 let score = 0;
 
 function start(attempts) {
@@ -26,23 +25,34 @@ function start(attempts) {
       },
     ])
     .then((resp) => {
-      let guess = pokemon.attempt(resp.guess, attempts);
+      let letter = resp.guess.toLowerCase();
 
-      if (pokemon.win()) {
-        score++;
-
-        console.log(chalk.yellow("You Win!"));
-        console.log("\nGuess another Pokemon!\n");
-
-        pokemon = new Word(data[Math.floor(Math.random() * 149)]);
-
-        console.log(`${pokemon.display()}\n\n`);
-
-        start(10);
-      } else if (!guess) {
-        start(attempts - 1);
-      } else {
+      if (
+        letter.length > 1 ||
+        letter.charCodeAt(0) < 97 ||
+        letter.charCodeAt(0) > 122
+      ) {
+        console.log(chalk.redBright("\nInvalid Entry\n"));
         start(attempts);
+      } else {
+        let guess = pokemon.attempt(letter, attempts);
+
+        if (pokemon.win()) {
+          score++;
+
+          console.log(chalk.yellow("You Win!"));
+          console.log("\nGuess another Pokemon!\n");
+
+          pokemon = new Word(data[Math.floor(Math.random() * 149)]);
+
+          console.log(`${pokemon.display()}\n\n`);
+
+          start(10);
+        } else if (!guess) {
+          start(attempts - 1);
+        } else {
+          start(attempts);
+        }
       }
     });
 }
