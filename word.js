@@ -1,50 +1,54 @@
 const Letter = require("./letter");
+const chalk = require("chalk");
 
 function Word(str) {
+  this.val = str;
   this.arr = [...str].map((char) => new Letter(char));
-  this.solved = 0;
+  this.attempted = [];
 
   this.display = function () {
     return this.arr.join(" ");
   };
 
   this.win = function () {
-    return this.solved === this.arr.length;
+    return this.val === this.arr.join("");
   };
 
   this.attempt = function (char, attempts) {
-    let correct = false;
-    let alreadyGuessed = false;
-
-    for (let i = 0; i < this.arr.length; i++) {
-      if (this.arr[i].guessed && this.arr[i].guess(char)) {
-        alreadyGuessed = true;
-        break;
-      } else if (this.arr[i].guess(char)) {
-        correct = true;
-        this.solved++;
-      }
+    if (this.attempted.includes(char)) {
+      console.log(`\n${this.display()}\n`);
+      console.log("Already guessed!\n");
+      return true;
     }
+
+    let correct = false;
+
+    this.arr.forEach((letter) => {
+      if (letter.guess(char)) {
+        correct = true;
+      }
+    });
 
     console.log(`\n${this.display()}\n`);
 
-    if (alreadyGuessed) {
-      console.log("Already guessed\n");
-    } else if (correct) {
-      console.log("Correct!\n");
-    } else {
-      console.log(`Wrong!\n\n${attempts - 1} attempt(s) remaining\n`);
+    if (!this.win()) {
+      if (correct) {
+        console.log(chalk.greenBright("Correct!\n"));
+      } else if (attempts - 1 > 0) {
+        console.log(
+          chalk.redBright("Wrong!") +
+            `\n\n${attempts - 1} attempt(s) remaining\n`
+        );
+      }
     }
 
-    return correct || alreadyGuessed;
+    this.attempted.push(char);
+
+    return correct;
   };
 
   this.reveal = function () {
-    this.arr.forEach((letter) => {
-      letter.guessed = true;
-    });
-
-    return this.arr.join("");
+    return this.val;
   };
 }
 

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/code-guy21/word-guess#readme",
   "dependencies": {
+    "chalk": "^4.1.0",
     "inquirer": "^7.1.0"
   }
 }
